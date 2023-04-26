@@ -23,6 +23,8 @@ public class BoardController {
         return boardService.createBoard(requestDto, request);
     }
 
+
+
     //게시글 조회
     @GetMapping("/post")
     public List<BoardResponseDto> getList() {
