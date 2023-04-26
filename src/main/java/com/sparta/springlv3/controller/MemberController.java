@@ -17,7 +17,7 @@ import javax.validation.Valid;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("api/auth")
+@RequestMapping("/api/auth")
 public class MemberController {
     private final MemberService memberService;
 

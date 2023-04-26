@@ -1,17 +1,16 @@
 package com.sparta.springlv3.controller;
 
-import com.sparta.springlv3.dto.BoardRequestDto;
-import com.sparta.springlv3.dto.BoardResponseDto;
-import com.sparta.springlv3.dto.CommentRequestDto;
-import com.sparta.springlv3.dto.CommentResponseDto;
+import com.sparta.springlv3.dto.*;
 import com.sparta.springlv3.service.CommentService;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import javax.servlet.http.HttpServletRequest;
 
 @RestController
-@RequestMapping("api")
+@RequestMapping("/api")
 @RequiredArgsConstructor
 public class CommentController {
 
@@ -23,9 +22,9 @@ public class CommentController {
         return commentService.createComment(requestDto, request);
     }
     //댓글 수정
-    @PutMapping("/comment/{id}")
-    public CommentResponseDto updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto, HttpServletRequest request){
-        return commentService.updateComment(id, commentRequestDto, request);
+    @PutMapping("/comment/{commentid}")
+    public CommentResponseDto updateComment(@PathVariable Long commentid, @RequestBody CommentRequestDto commentRequestDto, HttpServletRequest request){
+        return commentService.updateComment(commentid, commentRequestDto, request);
     }
     //댓글 삭제
     @ResponseStatus(HttpStatus.OK)

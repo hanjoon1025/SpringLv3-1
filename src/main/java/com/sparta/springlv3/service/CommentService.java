@@ -1,9 +1,6 @@
 package com.sparta.springlv3.service;
 
-import com.sparta.springlv3.dto.BoardRequestDto;
-import com.sparta.springlv3.dto.BoardResponseDto;
-import com.sparta.springlv3.dto.CommentRequestDto;
-import com.sparta.springlv3.dto.CommentResponseDto;
+import com.sparta.springlv3.dto.*;
 import com.sparta.springlv3.entity.Board;
 import com.sparta.springlv3.entity.Comment;
 import com.sparta.springlv3.entity.Member;
@@ -17,6 +14,7 @@ import com.sparta.springlv3.repository.CommentRepository;
 import com.sparta.springlv3.repository.MemberRepository;
 import io.jsonwebtoken.Claims;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -52,21 +50,21 @@ public class CommentService {
 
     //댓글 수정
     @Transactional
-    public CommentResponseDto updateComment(Long id, CommentRequestDto commentRequestDto, HttpServletRequest request) {
+    public CommentResponseDto updateComment(Long commentid, CommentRequestDto commentRequestDto, HttpServletRequest request) {
         Member member = checkJwtToken(request);
 
         if(member == null){
             throw new InvalidTokenException("로그인 하세요.");
         }
 
-        Comment comment = commentRepository.findById(id).orElseThrow(
+        Comment comment = commentRepository.findById(commentid).orElseThrow(
                 () -> new IllegalArgumentException("댓글이 존재하지 않습니다.")
         );
         //댓글 작성자 또는 관리자만 수정할 수 있다.
-        if(member.getUsername().equals(comment.getMember()) || member.getRole() == UserRoleEnum.ADMIN){
+        if(member.getUsername().equals(comment.getMember().getUsername()) || member.getRole() == UserRoleEnum.ADMIN){
             comment.update(commentRequestDto);
         }else{
-            throw new IllegalArgumentException("댓글 수정권한이 없습니다.");
+            throw new UnauthorizedUserException("작성자만 댓글을 수정할 수 있습니다.");
         }
         return new CommentResponseDto(comment);
     }

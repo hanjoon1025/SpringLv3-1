@@ -9,7 +9,7 @@ import lombok.Setter;
 @Setter
 @NoArgsConstructor
 public class CommentRequestDto {
-    private Long id; // 게시글 ID
+    private Long id;
     private String content; //작성할 댓글
 
 }

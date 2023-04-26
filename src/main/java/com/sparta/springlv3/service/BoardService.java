@@ -38,6 +38,8 @@ public class BoardService {
         Board board = new Board(requestDto, member);
 
         return new BoardResponseDto(boardRepository.save(board));
+
+
     }
 
 

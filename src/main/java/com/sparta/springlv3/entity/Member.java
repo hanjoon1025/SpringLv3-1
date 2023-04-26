@@ -11,7 +11,7 @@ import javax.persistence.*;
 @NoArgsConstructor
 public class Member {
 
-    private UserRoleEnum role;
+
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,8 +21,9 @@ public class Member {
     @Column(nullable = false)
     private String password;
 
-
-
+    @Enumerated(value = EnumType.STRING)
+    @Column(nullable = false)
+    private UserRoleEnum role;
 
 
     public Member(SignupRequestDto signupRequestDto, UserRoleEnum role) {
