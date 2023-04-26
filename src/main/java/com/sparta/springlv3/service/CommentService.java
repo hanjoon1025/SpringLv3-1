@@ -9,6 +9,8 @@ import com.sparta.springlv3.entity.Comment;
 import com.sparta.springlv3.entity.Member;
 import com.sparta.springlv3.entity.UserRoleEnum;
 import com.sparta.springlv3.exception.BoardNotFoundException;
+import com.sparta.springlv3.exception.InvalidTokenException;
+import com.sparta.springlv3.exception.UnauthorizedUserException;
 import com.sparta.springlv3.jwt.JwtUtil;
 import com.sparta.springlv3.repository.BoardRepository;
 import com.sparta.springlv3.repository.CommentRepository;
@@ -54,7 +56,7 @@ public class CommentService {
         Member member = checkJwtToken(request);
 
         if(member == null){
-            throw new IllegalArgumentException("로그인 하세요.");
+            throw new InvalidTokenException("로그인 하세요.");
         }
 
         Comment comment = commentRepository.findById(id).orElseThrow(
@@ -67,6 +69,26 @@ public class CommentService {
             throw new IllegalArgumentException("댓글 수정권한이 없습니다.");
         }
         return new CommentResponseDto(comment);
+    }
+
+    //댓글 삭제
+    @Transactional
+    public CommentDeleteResponseDto deleteComment(Long commentid, HttpServletRequest request) {
+        Member member = checkJwtToken(request);
+        if(member == null){
+            throw new InvalidTokenException("로그인 하세요.");
+        }
+
+        Comment comment = commentRepository.findById(commentid).orElseThrow(
+                () -> new IllegalArgumentException("댓글이 존재하지 않습니다.")
+        );
+        if(member.getUsername().equals(comment.getMember().getUsername()) || member.getRole() == UserRoleEnum.ADMIN){
+            commentRepository.deleteById(commentid);
+        }else{
+            throw new UnauthorizedUserException("작성자만 댓글을 삭제할 수 있습니다.");
+        }
+       return new CommentDeleteResponseDto();
+
     }
 
     //토큰 유효 확인

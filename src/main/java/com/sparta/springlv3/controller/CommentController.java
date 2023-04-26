@@ -27,7 +27,13 @@ public class CommentController {
     public CommentResponseDto updateComment(@PathVariable Long id, @RequestBody CommentRequestDto commentRequestDto, HttpServletRequest request){
         return commentService.updateComment(id, commentRequestDto, request);
     }
+    //댓글 삭제
+    @ResponseStatus(HttpStatus.OK)
+    @DeleteMapping("/comment/{commentid}")
+    public CommentDeleteResponseDto deleteComment(@PathVariable Long commentid, HttpServletRequest request){
+       return commentService.deleteComment(commentid, request);
 
+    }
 
 
 }

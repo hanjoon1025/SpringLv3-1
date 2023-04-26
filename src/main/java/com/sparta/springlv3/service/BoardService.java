@@ -5,6 +5,8 @@ import com.sparta.springlv3.dto.BoardRequestDto;
 import com.sparta.springlv3.dto.BoardResponseDto;
 import com.sparta.springlv3.entity.Board;
 import com.sparta.springlv3.entity.Member;
+import com.sparta.springlv3.exception.InvalidTokenException;
+import com.sparta.springlv3.exception.UnauthorizedUserException;
 import com.sparta.springlv3.jwt.JwtUtil;
 import com.sparta.springlv3.repository.BoardRepository;
 import com.sparta.springlv3.repository.MemberRepository;
@@ -30,7 +32,7 @@ public class BoardService {
     public BoardResponseDto createBoard(BoardRequestDto requestDto, HttpServletRequest request) {
         Member member = checkJwtToken(request);
         if (member == null) {
-            throw new IllegalArgumentException("로그인이 필요합니다.");
+            throw new InvalidTokenException("로그인이 필요합니다.");
         }
 
         Board board = new Board(requestDto, member);
@@ -65,7 +67,7 @@ public class BoardService {
         );
 
         if (!board.getMember().getId().equals(member.getId())) {
-            throw new IllegalArgumentException("게시글 작성자만 수정할 수 있습니다.");
+            throw new UnauthorizedUserException("게시글 작성자만 수정할 수 있습니다.");
         }
 
         board.update(requestDto);
@@ -92,11 +94,11 @@ public class BoardService {
             if(jwtUtil.validateToken(token)){
                 claims = jwtUtil.getUserInfoFromToken(token);
             }else{
-                throw new IllegalArgumentException("Token Error");
+                throw new InvalidTokenException("Token Error");
             }
 
             Member member = memberRepository.findByUsername(claims.getSubject()).orElseThrow(
-                    () -> new IllegalArgumentException("사용자가 존재하지 않습니다")
+                    () -> new UnauthorizedUserException("사용자가 존재하지 않습니다")
             );
             return member;
         }else {

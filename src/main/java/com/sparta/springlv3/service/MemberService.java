@@ -5,6 +5,8 @@ import com.sparta.springlv3.dto.MemberRequestDto;
 import com.sparta.springlv3.dto.SignupRequestDto;
 import com.sparta.springlv3.entity.Member;
 import com.sparta.springlv3.entity.UserRoleEnum;
+import com.sparta.springlv3.exception.DuplicateUsernameException;
+import com.sparta.springlv3.exception.MemberNotFoundException;
 import com.sparta.springlv3.jwt.JwtUtil;
 import com.sparta.springlv3.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
@@ -33,7 +35,7 @@ public class MemberService {
         );
 
         if(!member.getPassword().equals(password)){
-            throw new IllegalArgumentException("비밀번호가 일치하지 않습니다.");
+            throw new MemberNotFoundException("아이디 찾을 수 없습니다.");
         }
         response.addHeader(JwtUtil.AUTHORIZATION_HEADER, jwtUtil.createToken(member.getUsername(), member.getRole()));
     }
@@ -42,7 +44,7 @@ public class MemberService {
         //회원가입 유저 아이디 중복확인
         Optional<Member> overlapUser = memberRepository.findByUsername(signupRequestDto.getUsername());
         if(overlapUser.isPresent()) {
-            throw new IllegalArgumentException("중복된 아이디가 있습니다.");
+            throw new DuplicateUsernameException("중복된 아이디가 있습니다.");
         }
 
 //        사용자 Role 확인
