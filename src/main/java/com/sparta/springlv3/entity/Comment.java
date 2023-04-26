@@ -13,7 +13,7 @@ public class Comment extends Timestamped {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id; // postId를 id로 변경
+    private Long id;
 
     @ManyToOne
     @JoinColumn(name = "member_id")

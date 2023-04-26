@@ -51,7 +51,10 @@ public class MemberService {
             if (!signupRequestDto.getAdminToken().equals(ADMIN_TOKEN)) {
                 throw new IllegalArgumentException("관리자 암호가 틀려 등록이 불가능합니다.");
             }
+
             role = UserRoleEnum.ADMIN;
+
+            System.out.println("관리자권한이 부여되었습니다.");
         }
         Member member = new Member(signupRequestDto, role);
         memberRepository.save(member);
