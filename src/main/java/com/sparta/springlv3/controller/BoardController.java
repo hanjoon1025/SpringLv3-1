@@ -25,7 +25,7 @@ public class BoardController {
 
 
 
-    //게시글 조회
+    //전체 게시글 조회
     @GetMapping("/post")
     public List<BoardResponseDto> getList() {
         return boardService.getList();

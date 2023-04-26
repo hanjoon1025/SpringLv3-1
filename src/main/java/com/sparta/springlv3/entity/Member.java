@@ -29,6 +29,6 @@ public class Member {
 
         this.username = signupRequestDto.getUsername();
         this.password = signupRequestDto.getPassword();
-
+        this.role = role;
     }
 }

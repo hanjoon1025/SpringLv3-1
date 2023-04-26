@@ -4,6 +4,7 @@ package com.sparta.springlv3.service;
 import com.sparta.springlv3.dto.MemberRequestDto;
 import com.sparta.springlv3.dto.SignupRequestDto;
 import com.sparta.springlv3.entity.Member;
+import com.sparta.springlv3.entity.UserRoleEnum;
 import com.sparta.springlv3.jwt.JwtUtil;
 import com.sparta.springlv3.repository.MemberRepository;
 import lombok.RequiredArgsConstructor;
